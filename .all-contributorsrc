@@ -40,6 +40,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "sery270",
+      "name": "Seran Park",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59532818?v=4",
+      "profile": "http://seranpark@devsisters.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
