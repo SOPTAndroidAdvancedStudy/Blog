@@ -1,6 +1,6 @@
 # Blog
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 안드로이드 공부한걸 팀 블로그에 Publish 해보자
@@ -21,6 +21,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="http://velog.io/@l2hyunwoo"><img src="https://avatars.githubusercontent.com/u/54518925?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hyun-Woo Lee</b></sub></a><br /><a href="https://github.com/SOPTAndroidAdvancedStudy/Blog/commits?author=l2hyunwoo" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://antilog.tistory.com/"><img src="https://avatars.githubusercontent.com/u/45380072?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jinsu Park</b></sub></a><br /><a href="https://github.com/SOPTAndroidAdvancedStudy/Blog/commits?author=jinsu4755" title="Documentation">📖</a></td>
   </tr>
 </table>
 
