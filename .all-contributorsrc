@@ -1,0 +1,60 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "l2hyunwoo",
+      "name": "Hyun-Woo Lee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54518925?v=4",
+      "profile": "http://velog.io/@l2hyunwoo",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jinsu4755",
+      "name": "Jinsu Park",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45380072?v=4",
+      "profile": "http://antilog.tistory.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "SSong-develop",
+      "name": "HunkiSong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51434873?v=4",
+      "profile": "http://hk73013124@gmail.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kym1924",
+      "name": "kym1924",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63637706?v=4",
+      "profile": "https://github.com/kym1924",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sery270",
+      "name": "Seran Park",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59532818?v=4",
+      "profile": "http://seranpark@devsisters.com",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "Blog",
+  "projectOwner": "SOPTAndroidAdvancedStudy",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
