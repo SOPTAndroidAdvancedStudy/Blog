@@ -7,4 +7,5 @@
 |Week|Subject|Publisher|
 |:------:|:------:|:------:|
 |1|Android Framework|@l2hyunwoo|
+|2|Main Thread + Handler|@sery270|
 
