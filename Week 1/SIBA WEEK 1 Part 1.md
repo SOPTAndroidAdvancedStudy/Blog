@@ -86,13 +86,13 @@
     }
 ```
 
-``SampleActivity``는 Hilt를 통해 바이트코드 단에서 ``Hilt_SampleActivity``와 동일하게 동작하고 내부 코드 중 ``_initHiltInternal``이란 함수에서 ``addOnContextAvailableListener``란 함수를 작동시킨다는 것을 알 수 있었습니다. 이는 ``ComponentActivity``에서 어떻게 동작하는 지 javadoc을 통해 알 수 있었습니다.
+``SampleActivity``는 Hilt를 통해 바이트코드 단에서 ``Hilt_SampleActivity``와 동일하게 동작하고 내부 코드 중 ``_initHiltInternal``이란 함수에서 ``addOnContextAvailableListener()``란 함수를 작동시킨다는 것을 알 수 있었습니다. 이는 ``ComponentActivity``에서 어떻게 동작하는 지 javadoc을 통해 알 수 있었습니다.
 
 >  addOnContextAvailableListener 클래스를 통해 추가된 OnContextAvailableListener 콜백은 context가 생성되기 이전에 추가되고, 이 순서대로 동작을 하게 됩니다. 이 콜백들은 super.onCreate()의 일부로 동작하게 됩니다.
 
-즉, Hilt로 Activity에 주입된 객체들은 ``super.onCreate`` 이후에 사용을 할 수 있었다는 사실을 알게되었습니다. 
+즉, Hilt로 Activity에 주입된 객체들은 ``super.onCreate()`` 이후에 사용을 할 수 있었다는 사실을 알게되었습니다. 
 
-그러나 이 조건문을 옮기면 캡쳐 방지 기능이 제대로 동작하지 않을 것 같아, ``super.onCreate`` 이후의 어느 곳에 위치를 시켜야할 지 몰라 이번에는 ``setFlags`` 함수를 조사하게 되었고, javadoc에서 일부 flag는 반드시 ``setContentView`` 함수 이전에 설정해야하는 javadoc을 보고 ``DataBindingUtil.setContentView`` 함수를 조사하게 되었습니다.
+그러나 이 조건문을 옮기면 캡쳐 방지 기능이 제대로 동작하지 않을 것 같아, ``super.onCreate()`` 이후의 어느 곳에 위치를 시켜야할 지 몰라 이번에는 ``setFlags()`` 함수를 조사하게 되었고, javadoc에서 일부 flag는 반드시 ``setContentView()`` 함수 이전에 설정해야하는 javadoc을 보고 ``DataBindingUtil.setContentView()`` 함수를 조사하게 되었습니다.
 
 ```java
     // DataBindingUtil.java
