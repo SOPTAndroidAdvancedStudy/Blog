@@ -120,7 +120,7 @@
     public abstract void setContentView(View view, ViewGroup.LayoutParams params);
 ```
 
-즉 ``DataBindingUtil.setContentView``은 ``Acitivy``의 ``setContentView`` 호출하고, 이는 다시 ``Window``의 ``setContentView``를 호출하게 되는데, 이는 ``setFlags``에서 지정해둔 flag들을 활용하여 ``window``의 feature를 결정해준다고 서술되어 있습니다. 즉, 위의 코드들은 ``super.onCreate()``와 ``DataBindingUtil.setContentView()`` 사이에 위치하면 정상적인 작동이 보장된다는 것이었고 실제로 아래와 같이 코드를 작성하니 화면 캡쳐 방지 기능이 원하는 대로 구현되었습니다.
+즉 ``DataBindingUtil.setContentView()``은 ``Activity``의 ``setContentView()`` 호출하고, 이는 다시 ``Window``의 ``setContentView()``를 호출하게 되는데, 이는 ``setFlags()``에서 지정해둔 flag들을 활용하여 ``window``의 feature를 결정해준다고 서술되어 있습니다. 즉, 위의 코드들은 ``super.onCreate()``와 ``DataBindingUtil.setContentView()`` 사이에 위치하면 정상적인 작동이 보장된다는 것이었고 실제로 아래와 같이 코드를 작성하니 화면 캡쳐 방지 기능이 원하는 대로 구현되었습니다.
 
 ## 소결
 
