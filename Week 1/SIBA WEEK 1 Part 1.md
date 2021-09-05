@@ -18,7 +18,7 @@
 >
 > Add following line of code in `onCreate()` method:
 >
-> ```scss
+> ```java
 > getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
 >                            WindowManager.LayoutParams.FLAG_SECURE);
 > ```
@@ -51,7 +51,7 @@
 
 그랬더니 Hilt를 통해 생성된 ``Hilt_SampleActivity``와 ``AppCompatAcitvity``의 Parent 클래스인 ``ComponentActivity``에서 다음과 같은 코드를 발견할 수 있었습니다.
 
-```kotlin
+```java
   // Hilt_SampleActivity
   Hilt_SampleActivity(int contentLayoutId) {
     super(contentLayoutId);
