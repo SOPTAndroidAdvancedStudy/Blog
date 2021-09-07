@@ -5,6 +5,8 @@
 
 안드로이드 공부한걸 팀 블로그에 Publish 해보자
 
+Team Blog : https://medium.com/write-android
+
 ## Schedule
 
 |Week|Subject|Publisher|
