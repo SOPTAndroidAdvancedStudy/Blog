@@ -13,6 +13,7 @@ Team Blog : https://medium.com/write-android
 |:------:|:------:|:------:|
 |1|Android Framework|@l2hyunwoo|
 |2|Main Thread + Handler|@sery270|
+|3|Drawn Out: How Android Renders (Google IO 2018)|@kym1924|
 
 ## Contributors ✨
 
