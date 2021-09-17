@@ -4,42 +4,16 @@
 
 -  Handler와 Looper 그리고 MessageQueue가 어떻게 동작하는지 안드로이드 프레임 워크를 통해 알아봅니다. 
 
+안드로이드의 메인스레드인 ActivityThread.java 를 이해하는데에 큰 배경 지식이 된다는 점에서 Handler와 Looper 그리고 MessageQueue의 동작 방식을 이해하는 것은 큰 가치가 있는 일입니다. 스레드 통신과 약간의 자료구조에 대한 부분까지 생각해보는 좋은 기회가 될 것입니다. 따라서 이번 아티클에서는 안드로이드 프레임워크의 코드와 함께 Handler와 Looper 그리고 MessageQueue의 동작 방식에 대해 깊게 알아보겠습니다. 
 
+Looper 
 
+Message와 MessageQueue
 
+Handler
 
-소결 
+안드로이드 Thread 모델은 자바의 Thread 모델을 그대로 따른다.
 
-------
-
-메인 스레드와 Handler Part2 -  안드로이드 애플리케이션에서의 메인 스레드
-
-- 안드로이드 애플리케이션에서  Handler와 Looper 그리고 MessageQueue 구조가 어떻게 쓰이는지 알아봅니다. 
-
-UI 처리를 위한 메인 스레드
-
-백그라운드 스레드에서 UI 업데이트
-
-메인 스레드에서 다음 작업 예약
-
-반복 UI 갱신
-
-시간 제한
-
-ANR
-
-Invalidate
-
-
+출처: https://link2me.tistory.com/1233 [소소한 일상 및 업무TIP 다루기]
 
 소결 
-
-
-
-
-
-비고 
-
-- 이번주 주제로 진행되고 있는 invalidate()부분은 생략했습니다. 
-
-- ANR 언급 정도만 하고 넘어갔는데, invalidate처럼 따로 파트 진행하면 좋을 것 같습니다. 
