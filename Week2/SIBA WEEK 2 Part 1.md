@@ -8,11 +8,52 @@
 
 ## 안드로이드의 메인스레드
 
--  ActivityThread.java
+안드로이드의 메인스레드는 어디에 있을까요 ? 프로그램의 시작인 main 함수를 따라가다보면, 안드로이드 프레임워크의 내부 클래스인 [ActivityThread.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/app/ActivityThread.java;l=1?q=ActivityThread.java&sq=&hl=ko)에 도달하게 됩니다. 즉, ActivityThread.java의 main 함수가 안드로이드 애플리케이션의 시작점이자 메인스레드가 되는 곳입니다. 이번 글에서 다루고자 하는 Handler-Looper 구조 중심으로 코드를 보면, 이들이 어떤 흐름으로 사용되는지 짐작할 수 있습니다. 
+
+```java
+/**
+ * This manages the execution of the main thread in an
+ * application process, scheduling and executing activities,
+ * broadcasts, and other operations on it as the activity
+ * manager requests.
+ *
+ * {@hide}
+ */
+public final class ActivityThread extends ClientTransactionHandler {
+    /** @hide */
+    public static void main(String[] args) {
+        // 생략
+
+        Looper.prepareMainLooper();
+
+        // 생략
+      
+        ActivityThread thread = new ActivityThread();
+        thread.attach(false, startSeq);
+
+        if (sMainThreadHandler == null) {
+            sMainThreadHandler = thread.getHandler();
+        }
+
+        if (false) {
+            Looper.myLooper().setMessageLogging(new
+                    LogPrinter(Log.DEBUG, "ActivityThread"));
+        }
+
+        // End of event ActivityThreadMain.
+        Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
+        Looper.loop();
+
+        throw new RuntimeException("Main thread loop unexpectedly exited");
+    }
+}
+```
+
+마지막에 호출된 Looper.loop()가 끝나면 정상적인 함수 종료가 아닌, RuntimeException을 터뜨리는데, 과연 loop()함수는 어떤 일을 하는 함수이기에 RuntimeException을 터뜨리는 걸까요 ? 
 
 ## Looper 
 
-안드로이드의 메인스레드인 ActivityThread.java에서 Looper가 중심이 된다는 것을 확인하였으니, 이 Looper에 대해 더 알아보겠습니다. 
+안드로이드의 메인스레드의 시작점인 ActivityThread.java에서 Handler-Looper 구조를 확인하였습니다. Looper와 loop() 함수에 대해 더 알아보겠습니다. 
 
 ### Looper의 역할
 
