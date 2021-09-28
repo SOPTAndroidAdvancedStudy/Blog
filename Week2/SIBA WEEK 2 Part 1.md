@@ -187,7 +187,11 @@ public final class Message implements Parcelable {
 
 #### MessageQueue가 Linked 구조로 구현된 이유 with 타임 스탬프 
 
-MessageQueue에 Message가 enqueue되는 알고리즘에는 타임스탬프(when + delay) 라는 변수 영향을 줍니다. Message를 enqueue하는 데에는 when이라는 값 이외에 개발자가 delay라는 값을 설정할 수 있습니다. 즉 타임스탬프 값에 따라, MessageQueue의 중간에 enqueue해야하는 경우가 발생하게 빈번히 발생하게 됩니다. 중간 삽입에 편리한 구조를 사용한다는점에서, 배열 구조가 아닌 링크 구조로 구현되어있다고 이해할 수 있습니다. 이 밖에, 링크 구조는 일반적으로 요소의 개수 제한이 없어, 수많은 Message를 담아야하는 MessageQueue에게 적합하다고 볼 수 있습니다. 한마디로, MessageQueue는 Message를 담는 자료구조이며, 개수 제한과 중간 삽입 속도이 쉬운 링크구조의 Queue로 구현되어있다고 요약하겠습니다. 
+MessageQueue에 Message가 enqueue되는 알고리즘에는 타임스탬프(when + delay) 라는 변수 영향을 줍니다. Message를 enqueue하는 데에는 when이라는 값 이외에 개발자가 delay라는 값을 설정할 수 있습니다. 
+
+즉 타임스탬프 값에 따라, MessageQueue의 중간에 enqueue해야하는 경우가 발생하게 빈번히 발생하게 됩니다. 중간 삽입에 편리한 구조를 사용한다는점에서, 배열 구조가 아닌 링크 구조로 구현되어있다고 이해할 수 있습니다. 
+
+또한, 링크 구조는 일반적으로 요소의 개수 제한이 없어 수많은 Message를 담아야하는 MessageQueue에게 적합하다고 볼 수 있습니다. 따라서, MessageQueue는 위의 이유들로 인해 LinkedQueue로 구현되어있습니다.
 
 
 
