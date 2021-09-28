@@ -225,7 +225,11 @@ Handler가 작업을 처리하기 이전에, Handler는 (MessageQueue에서 Mess
 - send로 시작하는 메서드는 Message를 보냅니다.
 - post로 시작하는 메서드는 Runnable형태의 Message를 다룹니다.
 
-또한 Message의 처리 시점에 따라 -Delayed(), -AtTime(), -AtFrontOfQueue 방식으로 나뉘게 됩니다.
+또한 Message의 처리 시점에 따라 아래와 같은 함수들을 호출할 수 있습니다.
+
+- ~Delayed()
+- ~AtTime()
+- ~AtFrontOfQueue()
 
 ## 요약
 
