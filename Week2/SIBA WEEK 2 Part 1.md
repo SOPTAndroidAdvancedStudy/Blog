@@ -61,7 +61,7 @@ Looper라는 이름에서도 알 수 있듯이 하나의 반복 작업을 맡고
 
 ### Looper의 생성
 
-그렇다면 Looper는 어떻게 생성되고 관리될까요 ? 일단 기본적으로 Looper는 각 스레드에 종속되며, MesseageQueue는 각 Looper에 종속됩니다. 
+그렇다면 Looper는 어떻게 생성되고 관리될까요? 일단 기본적으로 Looper는 각 스레드에 종속되며, MesseageQueue는 각 Looper에 종속됩니다. 
 
 먼저 각 Looper는 스레드 상관없이, 자신을 생성한 스레드의 [Thread Local Storage (TLS)](https://docs.microsoft.com/ko-kr/windows/win32/procthread/thread-local-storage?redirectedfrom=MSDN)에 **저장**됩니다. 하지만 스레드가 메인 스레드이냐 아니냐에 따라 Looper의 **생성**은 다른 방식으로 이뤄집니다. 
 
@@ -75,13 +75,15 @@ Looper라는 이름에서도 알 수 있듯이 하나의 반복 작업을 맡고
 
 일반 스레드의 Looper는 개발자가 생성합니다. 
 
-**일반스레드**의 Looper를 생성하는 방법은 **prepare() 함수를 사용**하는 것 입니다. 또한 메인스레드와 마찬가지로, loop() 호출을 통해 동작하게 됩니다. 정리하면, 개발자는 일반스레드를 사용하는 곳에서 **prepare() 호출**을 통해 **Looper**를 **생성**하고 **loop() 호출**에 의해 **Looper**를 **동작**하게 합니다.
+일반스레드의 Looper를 생성하는 방법은 prepare() 함수를 사용하는 것 입니다. 또한 메인스레드와 마찬가지로, loop() 호출을 통해 동작하게 됩니다. 정리하면, 개발자는 일반스레드를 사용하는 곳에서 **prepare() 호출을 통해 Looper를 생성**하고 **loop() 호출에 의해 Looper를 동작**하게 합니다.
 
 ### Looper의 동작
 
 Looper의 동작을 이해하기 위해 Looper.loop() 메서드의 주요 코드를 확인해보겠습니다. loop() 함수안은 *pop한 내용물이 null일때*까지 반복하는 무한 loop로 구성되어있습니다. 이 무한 loop안에서, *msg.target.dispatchMessage(msg);* 를 통해, Handler인 *target*이 작업을 처리하게 만들어줍니다. 
 
-그렇다면 과연 *pop한 내용물이 null일때* , 즉 if (msg == null) 가 언제 참이 될까요 ? 바로 Looper를 종료하는 메서드인 quit(), quitSafely()가 호출될 때 입니다. 두 메서드는 결국 MesseageQueue의 quit()를 호출하며, 이의 결과로 queue.next()에서 null 반환되어 위의 if문을 통과하게 되는 것입니다. 이로써 Looper가 종료됩니다. 
+그렇다면 과연 *pop한 내용물이 null일때* , 즉 if (msg == null) 가 언제 참이 될까요 ? 
+
+바로 Looper를 종료하는 메서드인 quit(), quitSafely()가 호출될 때 입니다. 두 메서드는 결국 MesseageQueue의 quit()를 호출하며, 이의 결과로 queue.next()에서 null 반환되어 위의 if문을 통과하게 되는 것입니다. 이로써 Looper가 종료됩니다. 
 
 ```java
 /**
@@ -122,6 +124,92 @@ public static void loop() {
         } // 무한 루프 끝 ‼️
     }
 ```
+
+
+
+그렇다면 과연 두 함수의 차이는 무엇이고, Thread를 통해 호출된 함수가 어떻게 Looper, MessageQueue에 영향을 주게 되는지 알아보겠습니다. 
+
+먼저 quit()와 quitSafely()의 차이는 Looper의 종료 시점입니다. 아래와 같이 요약할 수 있습니다.
+
+>**quit()** 
+>즉시 Looper를 종료합니다. 
+
+> **quitSafely()** 
+> MessageQueue의 남아있는 작업들을 처리한 후 Looper를 종료합니다.
+
+다음으로 HandlerThread에 정의된 두 함수를 시작으로, 호출 과정을 살펴보겠습니다. 
+
+[android.os.HandlerThread](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/HandlerThread.java?q=android.os.HandlerThread&hl=ko) 에선 Looper에 대한 널 체크를 한후, Looper에 정의된 동명의 함수를 호출합니다. 
+
+```
+    public boolean quit() {
+        Looper looper = getLooper();
+        if (looper != null) {
+            looper.quit();
+            return true;
+        }
+        return false;
+    }
+       public boolean quitSafely() {
+        Looper looper = getLooper();
+        if (looper != null) {
+            looper.quitSafely();
+            return true;
+        }
+        return false;
+    }
+```
+
+[android.os.Looper](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/Looper.java;drc=master;l=362?hl=ko) 에선 자신이 소유한 MessageQueue의 quit() 함수를 호출합니다. 
+
+물론 Looper.quit()과 Looper.quitSafely() 동작은 MessageQueue.quit() 함수의 boolean 형의 매개변수 값으로 분기 처리됩니다. 
+
+```
+   public void quit() {
+        mQueue.quit(false);
+    }
+
+    public void quitSafely() {
+        mQueue.quit(true);
+    }
+
+```
+
+[android.os.MessageQueue](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/MessageQueue.java;drc=master;l=425?hl=ko) 의 quit()은 boolean 매개변수 safe에 따라, removeAllMessagesLocked()와 removeAllFutureMessagesLocked()를 호출합니다. 
+
+> **removeAllMessagesLocked()** 
+> 현재 MessageQueue의 모든 메세지에 대해  [recycleUnchecked](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/Message.java;drc=master;l=324?hl=ko)()를 호출합니다. 
+
+> **removeAllFutureMessagesLocked()** 
+> 무한 루프를 돌며 기존 Looper의 작업을 재개합니다. 
+> 다만, 작업 재개에 있어 [uptimeMillis](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/SystemClock.java;drc=master;l=178?hl=ko)()과 when을 비교하는데, 만약 when이 [uptimeMillis](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/SystemClock.java;drc=master;l=178?hl=ko)()보다 더 미래일 경우 작업을 멈추고, MessageQueue의 남은 메세지에 대해  [recycleUnchecked](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/Message.java;drc=master;l=324?hl=ko)()를 호출합니다. 
+
+```
+   void quit(boolean safe) {
+        if (!mQuitAllowed) {
+            throw new IllegalStateException("Main thread not allowed to quit.");
+        }
+
+        synchronized (this) {
+            if (mQuitting) {
+                return;
+            }
+            mQuitting = true;
+
+            if (safe) {
+                removeAllFutureMessagesLocked();
+            } else {
+                removeAllMessagesLocked();
+            }
+
+            // We can assume mPtr != 0 because mQuitting was previously false.
+            nativeWake(mPtr);
+        }
+    }
+
+```
+
+
 
 ## Message와 MessageQueue
 
