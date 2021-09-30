@@ -8,7 +8,7 @@
 
 ## 안드로이드의 메인스레드
 
-안드로이드의 메인스레드는 어디에 있을까요 ? 프로그램의 시작인 main 함수를 따라가다보면, 안드로이드 프레임워크의 내부 클래스인 [ActivityThread.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/app/ActivityThread.java;l=1?q=ActivityThread.java&sq=&hl=ko)에 도달하게 됩니다. 즉, ActivityThread.java의 main 함수가 안드로이드 애플리케이션의 시작점이자 메인스레드가 되는 곳입니다. 이번 글에서 다루고자 하는 Handler-Looper 구조 중심으로 코드를 보면, 이들이 어떤 흐름으로 사용되는지 짐작할 수 있습니다. 
+안드로이드의 메인스레드는 어디에 있을까요? 프로그램의 시작인 main 함수를 따라가다보면, 안드로이드 프레임워크의 내부 클래스인 [ActivityThread.java](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/app/ActivityThread.java;l=1?q=ActivityThread.java&sq=&hl=ko)에 도달하게 됩니다. 즉, ActivityThread.java의 main 함수가 안드로이드 애플리케이션의 시작점이자 메인스레드가 되는 곳입니다. 이번 글에서 다루고자 하는 Handler-Looper 구조 중심으로 코드를 보면, 이들이 어떤 흐름으로 사용되는지 짐작할 수 있습니다. 
 
 ```java
 /**
@@ -49,7 +49,7 @@ public final class ActivityThread extends ClientTransactionHandler {
 }
 ```
 
-마지막에 호출된 Looper.loop()가 끝나면 정상적인 함수 종료가 아닌, RuntimeException을 터뜨리는데, 과연 loop()함수는 어떤 일을 하는 함수이기에 RuntimeException을 터뜨리는 걸까요 ? 
+마지막에 호출된 Looper.loop()가 끝나면 정상적인 함수 종료가 아닌, RuntimeException을 터뜨리는데, 과연 loop()함수는 어떤 일을 하는 함수이기에 RuntimeException을 터뜨리는 걸까요? 
 
 ## Looper 
 
@@ -81,7 +81,7 @@ Looper라는 이름에서도 알 수 있듯이 하나의 반복 작업을 맡고
 
 Looper의 동작을 이해하기 위해 Looper.loop() 메서드의 주요 코드를 확인해보겠습니다. loop() 함수안은 *pop한 내용물이 null일때*까지 반복하는 무한 loop로 구성되어있습니다. 이 무한 loop안에서, *msg.target.dispatchMessage(msg);* 를 통해, Handler인 *target*이 작업을 처리하게 만들어줍니다. 
 
-그렇다면 과연 *pop한 내용물이 null일때* , 즉 if (msg == null) 가 언제 참이 될까요 ? 
+그렇다면 과연 *pop한 내용물이 null일때* , 즉 if (msg == null) 가 언제 참이 될까요? 
 
 바로 Looper를 종료하는 메서드인 quit(), quitSafely()가 호출될 때 입니다. 두 메서드는 결국 MesseageQueue의 quit()를 호출하며, 이의 결과로 queue.next()에서 null 반환되어 위의 if문을 통과하게 되는 것입니다. 이로써 Looper가 종료됩니다. 
 
