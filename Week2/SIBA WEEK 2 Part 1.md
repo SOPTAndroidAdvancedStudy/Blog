@@ -2,6 +2,8 @@
 
 # 메인 스레드와 Handler - Handler와 Looper 그리고 MessageQueue의 동작 방식 
 
+> Handler와 Looper 그리고 MessageQueued의 의 동작 방식을 안드로이드 프레임 워크를 통해 알아봅니다.
+
 안드로이드의 메인스레드인 ActivityThread.java 를 이해하는데에 큰 배경 지식이 된다는 점에서 Handler와 Looper 그리고 MessageQueue의 동작 방식을 이해하는 것은 큰 가치가 있는 일입니다. 스레드 통신과 약간의 자료구조에 대한 부분까지 생각해보는 좋은 기회가 될 것입니다. 따라서 이번 아티클에서는 안드로이드 프레임워크의 코드와 함께 Handler와 Looper 그리고 MessageQueue의 동작 방식에 대해 깊게 알아보겠습니다. 
 
 
@@ -141,7 +143,7 @@ public static void loop() {
 
 [android.os.HandlerThread](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/HandlerThread.java?q=android.os.HandlerThread&hl=ko) 에선 Looper에 대한 널 체크를 한후, Looper에 정의된 동명의 함수를 호출합니다. 
 
-```
+```java
     public boolean quit() {
         Looper looper = getLooper();
         if (looper != null) {
@@ -164,7 +166,7 @@ public static void loop() {
 
 물론 Looper.quit()과 Looper.quitSafely() 동작은 MessageQueue.quit() 함수의 boolean 형의 매개변수 값으로 분기 처리됩니다. 
 
-```
+```java
    public void quit() {
         mQueue.quit(false);
     }
@@ -184,7 +186,7 @@ public static void loop() {
 > 무한 루프를 돌며 기존 Looper의 작업을 재개합니다. 
 > 다만, 작업 재개에 있어 [uptimeMillis](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/SystemClock.java;drc=master;l=178?hl=ko)()과 when을 비교하는데, 만약 when이 [uptimeMillis](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/SystemClock.java;drc=master;l=178?hl=ko)()보다 더 미래일 경우 작업을 멈추고, MessageQueue의 남은 메세지에 대해  [recycleUnchecked](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/Message.java;drc=master;l=324?hl=ko)()를 호출합니다. 
 
-```
+```java
    void quit(boolean safe) {
         if (!mQuitAllowed) {
             throw new IllegalStateException("Main thread not allowed to quit.");
@@ -229,7 +231,7 @@ MessageQueue는 Message를 담고 있는 자료구조라 말씀드렸습니다. 
 
 먼저 [Message 클래스](https://cs.android.com/android/platform/superproject/+/master:frameworks/base/core/java/android/os/Message.java?q=public%20final%20class%20Message%20implement%20Parcelable&ss=android&hl=ko) 에는 핸들러가 스레드간의 통신 매개로서 전달해야할, (다른 스레드에서 실행될) 작업에 대한 정보를 담고있습니다. 
 
-```
+```java
 public final class Message implements Parcelable {
     /**
      * User-defined message code so that the recipient can identify
